@@ -1,32 +1,81 @@
-import React, { useState } from 'react'
+import React from "react";
+import { useFormik, Formik, Field } from "formik";
 
-const AddUserForm = props => {
-    const initialFormState = { id: null, name: '', username: '' }
-    const [user, setUser] = useState(initialFormState)
-
-    const handleInputChange = event => {
-        const { name, value } = event.target
-
-        setUser({ ...user, [name]: value })
+const validate = values => {
+    const errors = {};
+    if (!values.firstName) {
+        errors.firstName = 'Required';
+    } else if (values.firstName.length > 15) {
+        errors.firstName = 'Must be 15 characters or less';
     }
 
+    if (!values.lastName) {
+        errors.lastName = 'Required';
+    } else if (values.lastName.length > 20) {
+        errors.lastName = 'Must be 20 characters or less';
+    }
+
+    if (!values.email) {
+        errors.email = 'Required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address';
+    }
+
+    return errors;
+};
+
+const FormikContext = React.createContext({});
+
+
+const AddUser = () => {
+    const formik = useFormik({
+        initialValues: { email: "" },
+        validate,
+        onSubmit: values => {
+            alert(JSON.stringify(values, null, 2));
+        }
+    });
     return (
-        <form
-            onSubmit={event => {
-                event.preventDefault()
-                if (!user.name || !user.username) return
+        <Formik
+            initialValues={{ firstName: '', lastName: '', email: '' }}
+            onSubmit={(values, { setSubmitting }) => {
+                setTimeout(() => {
+                    alert(JSON.stringify(values, null, 2));
+                    setSubmitting(false);
+                }, 400);
+            }}>
+            <form onSubmit={formik.handleSubmit}>
+                <label htmlFor="firstName">First Name</label>
+                <Field
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    onChange={formik.handleChange}
+                    value={formik.values.firstName}
+                />
+                {formik.errors.firstName ? <div>{formik.errors.firstName}</div> : null}
+                <label htmlFor="lastName">Last Name</label>
+                <input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    onChange={formik.handleChange}
+                    value={formik.values.lastName}
+                />
+                {formik.errors.lastName ? <div>{formik.errors.lastName}</div> : null}
+                <label htmlFor="email">Email Address</label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    onChange={formik.handleChange}
+                    value={formik.values.email}
+                />
+                {formik.errors.email ? <div>{formik.errors.email}</div> : null}
+                <button type="submit">Submit</button>
+            </form>
+        </Formik>
+    );
+};
 
-                props.addUser(user)
-                setUser(initialFormState)
-            }}
-        >
-            <label>Name</label>
-            <input type="text" name="name" value={user.name} onChange={handleInputChange} />
-            <label>Username</label>
-            <input type="text" name="username" value={user.username} onChange={handleInputChange} />
-            <button>Add new user</button>
-        </form>
-    )
-}
-
-export default AddUserForm;
+export default AddUser;

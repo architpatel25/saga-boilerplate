@@ -4,4 +4,5 @@ export const config = {
     "API_WEB_URL": "http://192.168.0.4:3000/",
     "HOST_PART1": "redx-saga-boilerplate",
     "HOST_PART2": "app",
+    "GITHUB_API_URL": "https://api.github.com/"
 };

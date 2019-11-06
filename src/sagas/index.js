@@ -1,19 +1,23 @@
-import { put, takeLatest, all } from 'redux-saga/effects';
+import { put, takeLatest, call, take, takeEvery, all } from 'redux-saga/effects';
+import { config } from '../utils/constants';
 
-function* fetchNews() {
+function* getAllGithubUsers() {
+    const users = yield fetch(config.GITHUB_API_URL + 'users')
+        .then(response => response.json())
+        .then(response => {
+            return response;
+        });
+    console.log('users', users)
 
-    const json = yield fetch('https://newsapi.org/v1/articles?source=cnn&apiKey=c39a26d9c12f48dba2a5c00e35684ecc')
-        .then(response => response.json());
-
-    yield put({ type: "NEWS_RECEIVED", json: json.articles || [{ error: json.message }] });
+    yield put({ type: "GET_ALL_USERS", users });
 }
 
-function* actionWatcher() {
-    yield takeLatest('GET_NEWS', fetchNews)
+function* callUsersAPI() {
+    yield call('GET_ALL_USERS', getAllGithubUsers);
 }
 
 export default function* rootSaga() {
     yield all([
-        actionWatcher(),
+        callUsersAPI()
     ]);
 }
