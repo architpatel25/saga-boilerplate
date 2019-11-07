@@ -5,7 +5,6 @@ import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './store/reducers/index';
 import rootSaga from './sagas';
 import { logger } from 'redux-logger';
-
 import Routes from './routes';
 
 const AppStore = () => {

@@ -7,6 +7,13 @@ export const getAllUsers = () => {
     }
 }
 
+//delete user action
+export const deleteUser = () => {
+    return {
+        type: ACTION_TYPES.DELETE_USER
+    }
+}
+
 export const SUCCESS = {
     type: ACTION_TYPES.SUCCESS
 }

@@ -1,35 +1,29 @@
 import React, { useState } from 'react';
-import { Table, Button } from 'reactstrap';
+import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { withRouter, useHistory } from 'react-router-dom';
-import { UserButton } from './userStyle';
+import { UserButton } from './users.style';
 
 const UserList = (props) => {
-    const usersData = [{
-        "login": "mojombo",
-        "id": 1,
-        "avatar_url": "https://avatars0.githubusercontent.com/u/1?v=4",
-        "url": "https://api.github.com/users/mojombo",
-        "starred_url": "https://api.github.com/users/mojombo/starred{/owner}{/repo}",
-        "repos_url": "https://api.github.com/users/mojombo/repos",
-        "type": "User",
-    }, {
-        "login": "defunkt",
-        "id": 2,
-        "avatar_url": "https://avatars0.githubusercontent.com/u/2?v=4",
-        "url": "https://api.github.com/users/defunkt",
-        "starred_url": "https://api.github.com/users/defunkt/starred{/owner}{/repo}",
-        "repos_url": "https://api.github.com/users/defunkt/repos",
-        "type": "User",
-    }]
-
-    const [users, setUsers] = useState(usersData)
-
     let history = useHistory();
-    console.log('>props', history)
 
+    const [modal, setModal] = useState(false);
+
+    const toggle = () => setModal(!modal);
+
+    let deleteUserModal = <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Delete User</ModalHeader>
+        <ModalBody>
+            Are you sure ?
+    </ModalBody>
+        <ModalFooter>
+            <Button color="primary" onClick={toggle}>Delete</Button>{' '}
+            <Button color="secondary" onClick={toggle}>Cancel</Button>
+        </ModalFooter>
+    </Modal>
     return (
         <>
             <UserButton color="primary" onClick={() => history.push("/add-user")} >Add User</UserButton>
+            {deleteUserModal}
             <Table striped>
                 <thead>
                     <tr>
@@ -40,15 +34,15 @@ const UserList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.length > 0 ? (
-                        users.map(user => (
+                    {props.users.length > 0 ? (
+                        props.users.map(user => (
                             <tr key={user.id}>
                                 <td>{user.login}</td>
                                 <td>{user.url}</td>
                                 <td><a>{user.repos_url}</a></td>
                                 <td>
                                     <Button className="button muted-button">Edit</Button>
-                                    <Button color="danger">Delete</Button>
+                                    <Button color="danger" onClick={toggle}>Delete</Button>
                                 </td>
                             </tr>
                         ))

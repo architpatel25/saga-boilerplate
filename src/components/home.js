@@ -1,43 +1,38 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAllUsers } from '../store/actions/actions';
+import { getAllUsers, deleteUser } from '../store/actions/actions';
 import { withRouter } from 'react-router-dom';
+import UserList from '../components/users/usersList';
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
         }
     }
 
     componentDidMount = () => {
-        //this.props.getAllUsers();
-    }
-
-    static getDerivedStateFromProps = (nextProps, prevState) => {
-        //console.log('getDerivedStateFromProps', nextProps, prevState)
+        this.props.getAllUsers();
     }
 
     render() {
         return (
             <div>
-                <button onClick={this.props.getAllUsers}>Press to see Users</button>
+                <UserList users={this.props.users} />
             </div>
         )
     }
 }
 
 const mapStateToProps = (state) => {
-    console.log('state', state)
     return ({
-        article: state.news,
-        allUsers: state.users,
+        users: state.UsersReducer.users,
     })
 }
 
 const mapDispatchToProps = {
-    getAllUsers
+    getAllUsers,
+    deleteUser
 };
 
 Home = connect(
