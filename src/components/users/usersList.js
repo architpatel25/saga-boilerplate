@@ -1,29 +1,25 @@
 import React, { useState } from 'react';
 import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { withRouter, useHistory } from 'react-router-dom';
-import { UserButton } from './users.style';
+import { UserButton, EditButton } from './users.style';
+import { connect } from 'react-redux';
+import { getAllUsers, deleteUser } from '../../store/actions/actions';
 
-const UserList = (props) => {
+let UserList = (props) => {
     let history = useHistory();
 
     const [modal, setModal] = useState(false);
 
     const toggle = () => setModal(!modal);
 
-    let deleteUserModal = <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Delete User</ModalHeader>
-        <ModalBody>
-            Are you sure ?
-    </ModalBody>
-        <ModalFooter>
-            <Button color="primary" onClick={toggle}>Delete</Button>{' '}
-            <Button color="secondary" onClick={toggle}>Cancel</Button>
-        </ModalFooter>
-    </Modal>
+    const _deleteUser = user => () => {
+        console.log('user', user)
+        //setModal(!modal);
+    }
+
     return (
-        <>
+        <React.Fragment>
             <UserButton color="primary" onClick={() => history.push("/add-user")} >Add User</UserButton>
-            {deleteUserModal}
             <Table striped>
                 <thead>
                     <tr>
@@ -35,16 +31,18 @@ const UserList = (props) => {
                 </thead>
                 <tbody>
                     {props.users.length > 0 ? (
-                        props.users.map(user => (
-                            <tr key={user.id}>
-                                <td>{user.login}</td>
-                                <td>{user.url}</td>
-                                <td><a>{user.repos_url}</a></td>
-                                <td>
-                                    <Button className="button muted-button">Edit</Button>
-                                    <Button color="danger" onClick={toggle}>Delete</Button>
-                                </td>
-                            </tr>
+                        props.users.map((user, index) => (
+                            <>
+                                <tr key={user.id}>
+                                    <td>{user.login}</td>
+                                    <td>{user.url}</td>
+                                    <td><a>{user.repos_url}</a></td>
+                                    <td>
+                                        <EditButton className="button muted-button">Edit</EditButton>
+                                        <Button color="danger" onClick={_deleteUser(user)}>Delete</Button>
+                                    </td>
+                                </tr>
+                            </>
                         ))
                     ) : (
                             <tr>
@@ -53,8 +51,36 @@ const UserList = (props) => {
                         )}
                 </tbody>
             </Table>
-        </>
+            {modal &&
+                <Modal isOpen={modal} toggle={toggle} >
+                    <ModalHeader toggle={toggle}>Delete User</ModalHeader>
+                    <ModalBody>
+                        Are you sure ?
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={_deleteUser()}>Delete</Button>{' '}
+                        <Button color="secondary" onClick={toggle}>Cancel</Button>
+                    </ModalFooter>
+                </Modal>
+            }
+        </React.Fragment>
     );
 }
+
+const mapStateToProps = (state) => {
+    return ({
+        users: state.UsersReducer.users,
+    })
+}
+
+const mapDispatchToProps = {
+    getAllUsers,
+    deleteUser
+};
+
+UserList = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UserList)
 
 export default withRouter(UserList);

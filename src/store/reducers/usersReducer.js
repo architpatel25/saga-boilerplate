@@ -7,6 +7,7 @@ export const initialState = {
 }
 
 export function UsersReducer(state = initialState, action) {
+    console.log('action in reducer', action)
     switch (action.type) {
         case ACTION_TYPES.GET_ALL_USERS:
             return {
@@ -16,6 +17,15 @@ export function UsersReducer(state = initialState, action) {
             return {
                 ...state,
                 users: action.users
+            }
+        case ACTION_TYPES.ADD_USER:
+            return {
+                ...state,
+                users: action.users
+            }
+        case ACTION_TYPES.ADD_USER_REQUEST:
+            return {
+                ...state,
             }
         case ACTION_TYPES.DELETE_USER:
             return {

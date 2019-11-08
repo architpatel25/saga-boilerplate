@@ -7,6 +7,22 @@ export const getAllUsers = () => {
     }
 }
 
+//add user action
+export const addUser = (data) => {
+    return {
+        type: ACTION_TYPES.ADD_USER,
+        data
+    }
+}
+
+//update user action
+export const updateUser = (data) => {
+    return {
+        type: ACTION_TYPES.UPDATE_USER,
+        data
+    }
+}
+
 //delete user action
 export const deleteUser = () => {
     return {

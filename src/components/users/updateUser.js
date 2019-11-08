@@ -1,8 +1,8 @@
 import React from "react";
 import { useFormik, Formik } from "formik";
 import { UserForm, Title, UserButton, FieldLabel, ErrorTag, FieldInput } from './users.style';
-import { CancelButton } from './addUser.style';
-import { addUser } from '../../store/actions/actions';
+import { CancelButton } from './updateUser.style';
+import { updateUser } from '../../store/actions/actions';
 import { connect } from 'react-redux';
 
 const validate = values => {
@@ -34,20 +34,22 @@ const validate = values => {
     return errors;
 };
 
-let AddUser = (props) => {
+let UpdateUser = (props) => {
     const formik = useFormik({
         initialValues: { name: "", city: "", url: "", email: "" },
         validate,
         onSubmit: values => {
+            console.log('>>', JSON.stringify(values, null, 2));
             let data = JSON.stringify(values, null, 2);
-            props.addUser(data)
+            props.updateUser(data)
         },
     });
+    console.log('this.props', props)
 
     return (
         <Formik>
             <UserForm onSubmit={formik.handleSubmit}>
-                <Title>Add User</Title>
+                <Title>Update User</Title>
                 <FieldLabel>
                     Name *
                     <FieldInput
@@ -68,6 +70,7 @@ let AddUser = (props) => {
                         type="email"
                         name="email"
                         placeholder="Email"
+                        disabled={true}
                         onChange={formik.handleChange}
                     />
                     {formik.errors.email && <ErrorTag color="red">{formik.errors.email}</ErrorTag>}
@@ -98,7 +101,7 @@ let AddUser = (props) => {
                 </FieldLabel>
                 <div>
                     <CancelButton onClick={() => props.history.push('/')}>Cancel</CancelButton>
-                    <UserButton type="submit">Submit</UserButton>
+                    <UserButton type="submit">Update</UserButton>
                 </div>
             </UserForm>
         </Formik>
@@ -112,13 +115,13 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        addUser: (data) => dispatch(addUser(data))
+        updateUser: (data) => dispatch(updateUser(data))
     }
 }
 
-AddUser = connect(
+UpdateUser = connect(
     mapStateToProps,
     mapDispatchToProps
-)(AddUser)
+)(UpdateUser)
 
-export default AddUser;
+export default UpdateUser;
