@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { withRouter, useHistory } from 'react-router-dom';
 import { UserButton, EditButton } from './users.style';
@@ -32,17 +32,17 @@ let UserList = (props) => {
                 <tbody>
                     {props.users.length > 0 ? (
                         props.users.map((user, index) => (
-                            <>
-                                <tr key={user.id}>
+                            <React.Fragment key={user.id}>
+                                <tr>
                                     <td>{user.login}</td>
                                     <td>{user.url}</td>
                                     <td><a>{user.repos_url}</a></td>
                                     <td>
-                                        <EditButton className="button muted-button">Edit</EditButton>
+                                        <EditButton className="button muted-button" onClick={() => history.push(`/update-user/${user.id}`)}>Edit</EditButton>
                                         <Button color="danger" onClick={_deleteUser(user)}>Delete</Button>
                                     </td>
                                 </tr>
-                            </>
+                            </React.Fragment>
                         ))
                     ) : (
                             <tr>

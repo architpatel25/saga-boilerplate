@@ -2,37 +2,17 @@ import styled from 'styled-components';
 import { Button } from 'reactstrap';
 import { TextInput } from '../../helpers/formField';
 
-const TestButton = styled.button`
-  max-width: 150px;
-  margin: 20px 0;
-  padding: 9px 18px;
-  border-style: none;
-  border-radius: 5px;
-  background-color: #08c;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
-  font-size: 17px;
-  font-weight: 500;
-  color: #fff;
-  cursor: pointer;
-  outline: none;
-  -webkit-appearance: none;
-`;
-
 export const UserButton = styled(Button)`
-  font-size: 1.5em;
+  font-size: 1em;
   text-align: center;
-  padding: 20px;
-  color: yellow;
-  background-color: blue;
+  padding: 0.375rem 0.75rem;
   margin-bottom: 10px;
 `;
 
 export const EditButton = styled(Button)`
-  font-size: 1.5em;
+  font-size: 1em;
   text-align: center;
-  padding: 20px;
-  color: yellow;
-  background-color: blue;
+  padding: 0.375rem 0.75rem;
   margin-right: 5px;
 `;
 
